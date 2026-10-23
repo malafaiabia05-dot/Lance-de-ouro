@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("usuario_email", inputPerfilEmail.value);
             localStorage.setItem("usuario_time", inputPerfilTime.value);
             
-            alert("Perfil de torcedor updated com sucesso!");
+            alert("Perfil de torcedor atualizado com sucesso!");
         });
     }
 
@@ -61,9 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
         new Chart(ctxGols, {
             type: 'bar',
             data: {
-                labels: ['Botafogo', 'Palmeiras', 'Flamengo', 'Fortaleza'],
+                labels: ['Botafogo', 'Palmeiras', 'Flamengo', 'Fortaleza', 'São Paulo', 'Cruzeiro'],
                 datasets: [{
-                    label: 'Gols Pró',
+                    label: 'Gols Marcados',
                     data:,
                     backgroundColor: '#D4AF37',
                     borderColor: '#FFFFFF',
@@ -72,7 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
-                plugins: { legend: { labels: { color: '#FFFFFF' } } },
+                plugins: {
+                    legend: { labels: { color: '#FFFFFF' } }
+                },
                 scales: {
                     x: { ticks: { color: '#A0A0AB' } },
                     y: { ticks: { color: '#A0A0AB' }, beginAtZero: true }
@@ -98,7 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
-                plugins: { legend: { labels: { color: '#FFFFFF' } } },
+                plugins: {
+                    legend: { labels: { color: '#FFFFFF' } }
+                },
                 scales: {
                     x: { ticks: { color: '#A0A0AB' } },
                     y: { ticks: { color: '#A0A0AB' } }
@@ -122,13 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
-                plugins: { legend: { labels: { color: '#FFFFFF' } } }
+                plugins: {
+                    legend: { labels: { color: '#FFFFFF' } }
+                }
             }
-        });
-    }
-});
-
-            alert("Perfil de torcedor atualizado com sucesso!");
         });
     }
 });
