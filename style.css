@@ -50,13 +50,8 @@ body {
 }
 
 .slide:nth-child(3) {
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaS_uu9nJbhIsOKzLpm5h4GA_jK6JQbyLHI7N8mIDKPzcdARBSSnWE_Btp&s=10https://s2-oglobo.glbimg.com/ufK9yGXCjec2DgvIFTiaJyrseqk=/0x0:8256x5504/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_da025474c0c44edd99332dddb09cabe8/internal_photos/bs/2026/J/g/JPLQsLSxKUAHGOq2jgsA/115282956-cape-verdes-goalkeeper-01-vozinha-throws-the-ball-during-the-2026-world-cup-group-h-foot.jpg');
-  animation-delay: 12s;
-}
-
-.slide:nth-child(4) {
   background-image: url('https://img.magnific.com/fotos-gratis/conceito-de-jogo-de-futebol_23-2151043857.jpg');
-  animation-delay: 16s;
+  animation-delay: 12s;
 }
 
 .overlay {
@@ -271,14 +266,34 @@ input:focus {
   opacity: 0.8;
 }
 
+.conteudo-principal {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 40px;
+}
+
+.categoria-container {
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.categoria-titulo {
+  color: var(--texto-claro);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--cor-destaque);
+  padding-left: 12px;
+}
+
 .grid-cards-futebol {
-  display: flex;
-  gap: 30px;
-  margin-top: 40px;
-  padding: 20px 10px;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 20px;
+  padding: 15px 5px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  white-space: nowrap;
 }
 
 .grid-cards-futebol::-webkit-scrollbar {
@@ -286,7 +301,7 @@ input:focus {
 }
 
 .grid-cards-futebol::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: 10px;
 }
 
@@ -296,15 +311,18 @@ input:focus {
 }
 
 .card-fut-container {
-  flex: 0 0 auto;
+  flex: 0 0 220px !important;
   background-color: var(--bg-card);
   border: 1px solid var(--borda);
   border-radius: 12px;
-  width: 220px;
   overflow: hidden;
   position: relative;
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   white-space: normal; 
+}
+
+.card-fut-container.escondido {
+  display: none !important;
 }
 
 .card-fut-container:hover {
@@ -397,9 +415,28 @@ input:focus {
   font-weight: 700;
   margin-top: 1px;
 }
+
+.btn-mostrar-mais {
+  background-color: transparent;
+  color: var(--cor-destaque);
+  border: 1px solid var(--cor-destaque);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.btn-mostrar-mais:hover {
+  background-color: var(--cor-destaque);
+  color: var(--bg-principal);
+}
+
 .secao-dashboard canvas {
   width: 100% !important;
   height: auto !important;
   max-height: 250px;
 }
-
