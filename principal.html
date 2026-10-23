@@ -29,6 +29,20 @@
         <h2>Painel Analítico de Futebol</h2>
         <p class="subtitulo">Dados reais coletados via API e estatísticas de desempenho.</p>
 
+    <section class="secao-dashboard" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px;">
+    <div class="form-container" style="margin: 0; max-width: 100%; padding: 20px; position: relative;">
+        <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--cor-destaque);">📊 Desempenho do G-4</h3>
+        <div style="width: 100%; height: 220px;"><canvas id="graficoGols"></canvas></div>
+    </div>
+    <div class="form-container" style="margin: 0; max-width: 100%; padding: 20px; position: relative;">
+        <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--cor-destaque);">📈 Evolução de Pontos</h3>
+        <div style="width: 100%; height: 220px;"><canvas id="graficoPontos"></canvas></div>
+    </div>
+    <div class="form-container" style="margin: 0; max-width: 100%; padding: 20px; position: relative;">
+        <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--cor-destaque);">🧤 Tipos de Defesas</h3>
+        <div style="width: 100%; height: 220px;"><canvas id="graficoDefesas"></canvas></div>
+    </div>
+</section>
         <section class="secao-goleiros">
             <div class="grid-cards-futebol">
             </div>
