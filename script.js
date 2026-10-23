@@ -3,7 +3,7 @@ let greetButton = document.querySelector('.greet');
 let nextButton = document.querySelector('.next');
 let slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
-// Função simples para salvar um item
+
 function salvarItem(idConteudo) {
     let salvos = JSON.parse(localStorage.getItem('futhis_salvos')) || [];
     if (!salvos.includes(idConteudo)) {
@@ -12,6 +12,7 @@ function salvarItem(idConteudo) {
         alert('Adicionado aos seus itens salvos!');
     }
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     const formCadastro = document.querySelector("form");
     const inputPerfilNome = document.getElementById("perfil-nome");
@@ -51,6 +52,82 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("usuario_email", inputPerfilEmail.value);
             localStorage.setItem("usuario_time", inputPerfilTime.value);
             
+            alert("Perfil de torcedor updated com sucesso!");
+        });
+    }
+
+    const ctxGols = document.getElementById('graficoGols');
+    if (ctxGols) {
+        new Chart(ctxGols, {
+            type: 'bar',
+            data: {
+                labels: ['Botafogo', 'Palmeiras', 'Flamengo', 'Fortaleza'],
+                datasets: [{
+                    label: 'Gols Pró',
+                    data:,
+                    backgroundColor: '#D4AF37',
+                    borderColor: '#FFFFFF',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#FFFFFF' } } },
+                scales: {
+                    x: { ticks: { color: '#A0A0AB' } },
+                    y: { ticks: { color: '#A0A0AB' }, beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    const ctxPontos = document.getElementById('graficoPontos');
+    if (ctxPontos) {
+        new Chart(ctxPontos, {
+            type: 'line',
+            data: {
+                labels: ['Rod 26', 'Rod 27', 'Rod 28', 'Rod 29', 'Rod 30'],
+                datasets: [{
+                    label: 'Evolução Líder',
+                    data:,
+                    borderColor: '#D4AF37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    tension: 0.2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#FFFFFF' } } },
+                scales: {
+                    x: { ticks: { color: '#A0A0AB' } },
+                    y: { ticks: { color: '#A0A0AB' } }
+                }
+            }
+        });
+    }
+
+    const ctxDefesas = document.getElementById('graficoDefesas');
+    if (ctxDefesas) {
+        new Chart(ctxDefesas, {
+            type: 'pie',
+            data: {
+                labels: ['Difíceis', 'Pênaltis', 'Normais'],
+                datasets: [{
+                    data:,
+                    backgroundColor: ['#D4AF37', '#16161D', '#A0A0AB'],
+                    borderColor: '#27272A',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#FFFFFF' } } }
+            }
+        });
+    }
+});
+
             alert("Perfil de torcedor atualizado com sucesso!");
         });
     }
