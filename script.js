@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { labels: { color: '#FFFFFF' } }
                 },
@@ -100,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { labels: { color: '#FFFFFF' } }
                 },
@@ -119,13 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 labels: ['Difíceis', 'Pênaltis', 'Normais'],
                 datasets: [{
                     data:,
-                    backgroundColor: ['#D4AF37', '#16161D', '#A0A0AB'],
-                    borderColor: '#27272A',
+                    backgroundColor: ['#D4AF37', '#27272A', '#A0A0AB'],
+                    borderColor: '#16161D',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { labels: { color: '#FFFFFF' } }
                 }
