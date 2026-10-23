@@ -397,3 +397,9 @@ input:focus {
   font-weight: 700;
   margin-top: 1px;
 }
+.secao-dashboard canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 250px;
+}
+
