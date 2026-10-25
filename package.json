@@ -1,0 +1,16 @@
+{
+  "name": "@malafaiabia05-ponto/auth-module",
+  "version": "1.0.0",
+  "description": "Módulo de autenticação e gestão de sessão para a aplicação Lance de Ouro",
+  "main": "auth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [
+    "autenticacao",
+    "login",
+    "lance-de-ouro"
+  ],
+  "author": "Anna Silva",
+  "license": "ISC"
+}
