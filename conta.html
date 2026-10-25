@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Futhis</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <title>Cadastro - Lance de Ouro</title>
+    <link rel="stylesheet" href="estilo.css">
+    <script src="auth.js" defer></script>
 </head>
 <body>
  <div class="form-container">
@@ -16,7 +16,7 @@
     <h2>Entre para o Clube</h2>
     <p class="subtitulo">Crie seu perfil de torcedor e acesse o acervo.</p>
 
-    <form action="principal.html">
+    <form id="form-cadastro">
       <div class="input-group">
         <label for="nome">Nome Completo</label>
         <input type="text" id="nome" placeholder="Seu nome" required>
@@ -29,7 +29,7 @@
 
       <div class="input-group">
         <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="No mínimo 6 caracteres" required>
+        <input type="password" id="senha" placeholder="No mínimo 6 caracteres" required minlength="6">
       </div>
 
       <button type="submit" class="btn-enviar">Cadastrar perfil</button>
@@ -37,9 +37,22 @@
       <div class="divisor">ou</div>
       
       <p class="link-alternativo">
-        Já tem uma conta?<a href="login.html">Fazer login</a>
+        Já tem uma conta? <a href="login.html">Fazer login</a>
       </p>
     </form>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("form-cadastro").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nome = document.getElementById("nome").value;
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+
+        cadastrarUsuario(nome, email, senha);
+      });
+    });
+  </script>
 </body>
 </html>
