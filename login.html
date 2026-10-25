@@ -4,44 +4,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Futhis</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <title>Login - Lance de Ouro</title>
+  <link rel="stylesheet" href="estilo.css">
+  <script src="auth.js" defer></script>
 </head>
 
 <body>
 
   <main class="layout">
     <a href="index.html" class="logo-retornar">
-    <img src="logo.png">
-</a>
+      <img src="logo.png" alt="Voltar">
+    </a>
 
-  <div class="form-container">
+   <div class="form-container">
     <h2>Bem-vindo de volta!</h2>
     <p class="subtitulo">Entre com suas credenciais para acessar o acervo.</p>
 
-    <form action="#" method="POST">
+    <form id="form-login">
       <div class="input-group">
         <label for="email">E-mail</label>
         <input type="email" id="email" placeholder="seu@email.com" required>
       </div>
 
-        <div class="input-group">
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" placeholder="Sua senha" required>
-        </div>
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Sua senha" required>
+      </div>
 
       <button type="submit" class="btn-enviar">Acessar conta</button>
       
-    <div class="container-esqueci">
-     <a href="recuperar.html" class="link-esqueci">Esqueci minha senha</a>
+      <div class="container-esqueci">
+        <a href="recuperar.html" class="link-esqueci">Esqueci minha senha</a>
       </div>
 
       <p class="link-alternativo">
-        Não tem uma conta?<a href="conta.html">Criar perfil</a>
+        Não tem uma conta? <a href="conta.html">Criar perfil</a>
       </p>
     </form>
-  </div>
+   </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("form-login").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+
+        realizarLogin(email, senha);
+      });
+    });
+  </script>
 </body>
 
 </html>
