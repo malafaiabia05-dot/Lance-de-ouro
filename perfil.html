@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - Futhis</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <title>Meu Perfil - Lance de Ouro</title>
+    <link rel="stylesheet" href="estilo.css">
+    <script src="auth.js" defer></script>
 </head>
 <body>
 
     <header class="header-principal">
         <a href="principal.html" class="logo-retornar">
-            <img src="logo.png" alt="Futhis">
+            <img src="logo.png" alt="Lance de Ouro">
         </a>
         <nav class="menu-usuario">
             <a href="principal.html" class="btn-perfil">🏠 Painel</a>
-            <a href="index.html" class="btn-logout">🚪 Sair</a>
+            <a href="#" onclick="encerarSessao(); return false;" class="btn-logout">🚪 Sair</a>
         </nav>
     </header>
 
@@ -66,5 +66,25 @@
         </section>
     </main>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            checarSessao();
+
+            const dadosUsuario = localStorage.getItem("usuarioLogado");
+            if (dadosUsuario) {
+                const usuario = JSON.parse(dadosUsuario);
+                
+                const inputNome = document.getElementById("perfil-nome");
+                const inputEmail = document.getElementById("perfil-email");
+                
+                if (inputNome && usuario.nome) {
+                    inputNome.value = usuario.nome;
+                }
+                if (inputEmail && usuario.email) {
+                    inputEmail.value = usuario.email;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
