@@ -1,179 +1,119 @@
-// ===== FutHis: cadastro, login e recuperação de senha =====
-// ATENÇÃO: tudo fica no localStorage do navegador (serve para trabalho de faculdade).
-// Em um site real, senha e envio de código por e-mail precisam de um servidor.
+document.addEventListener("DOMContentLoaded", () => {
+    const formCadastro = document.getElementById("form-cadastro");
+    const formLogin = document.getElementById("form-login");
+    const formEsqueci = document.getElementById("form-esqueci");
+    const formRedefinir = document.getElementById("form-redefinir");
 
-const CHAVE_USUARIOS = 'futhis_usuarios';
-const CHAVE_SESSAO = 'futhis_sessao';
-const CHAVE_CODIGOS = 'futhis_codigos';
-const CHAVE_RESET = 'futhis_reset_email';
-const PAGINA_APOS_LOGIN = 'index.html';
-const PAGINA_LOGIN = 'login.html';
-const MINUTOS_VALIDADE_CODIGO = 10;
-const MAX_TENTATIVAS_CODIGO = 5;
+    if (formCadastro) {
+        formCadastro.addEventListener("submit", (event) => {
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmar-senha").value;
+            const erroEl = document.getElementById("cadastro-erro");
 
-const lerJSON = (chave, padrao) => {
-    try { return JSON.parse(localStorage.getItem(chave)) || padrao; }
-    catch { return padrao; }
-};
-const gravarJSON = (chave, valor) => localStorage.setItem(chave, JSON.stringify(valor));
-const normalizarEmail = (email) => email.trim().toLowerCase();
+            if (senha.length < 6) {
+                event.preventDefault();
+                if (erroEl) { erroEl.textContent = "A senha precisa ter no mínimo 6 caracteres."; erroEl.hidden = false; }
+                alert("Erro: A senha precisa ter no mínimo 6 caracteres!");
+                return;
+            }
 
-// ---------- Senha: nunca guardamos o texto puro (quando o navegador permite) ----------
-async function hashSenha(senha) {
-    if (window.crypto && crypto.subtle) {
-        const bytes = new TextEncoder().encode(senha);
-        const resumo = await crypto.subtle.digest('SHA-256', bytes);
-        const hex = [...new Uint8Array(resumo)].map(b => b.toString(16).padStart(2, '0')).join('');
-        return 'sha256:' + hex;
-    }
-    return 'txt:' + senha; // plano B se o navegador não tiver crypto.subtle
-}
+            if (senha !== confirmar) {
+                event.preventDefault();
+                if (erroEl) { erroEl.textContent = "As senhas não coincidem."; erroEl.hidden = false; }
+                alert("Erro: As senhas não coincidem! Repita a confirmação.");
+                document.getElementById("confirmar-senha").value = "";
+                document.getElementById("confirmar-senha").focus();
+                return;
+            }
 
-async function conferirSenha(senhaDigitada, guardada) {
-    if (guardada.startsWith('txt:')) return guardada === 'txt:' + senhaDigitada;
-    return guardada === await hashSenha(senhaDigitada);
-}
+            localStorage.setItem("usuario_nome", nome);
+            localStorage.setItem("usuario_email", email);
+            localStorage.setItem("usuario_senha", senha);
+            localStorage.setItem("futhis_sessao", "ativo");
 
-// ---------- Mensagens na tela ----------
-function mostrarMsg(idElemento, texto, sucesso = false) {
-    const el = document.getElementById(idElemento);
-    if (!el) { alert(texto); return; }
-    el.textContent = texto;
-    el.style.color = sucesso ? '#22C55E' : '#EF4444';
-    el.hidden = false;
-}
-
-// ---------- Sessão ----------
-function iniciarSessao(email) {
-    const u = lerJSON(CHAVE_USUARIOS, {})[email];
-    localStorage.setItem(CHAVE_SESSAO, email);
-    // Mantém compatível com a página de perfil que já existe
-    localStorage.setItem('usuario_nome', u.nome);
-    localStorage.setItem('usuario_email', email);
-    localStorage.setItem('usuario_time', u.time || '');
-}
-
-function sair() {
-    ['futhis_sessao', 'usuario_nome', 'usuario_email', 'usuario_time']
-        .forEach(c => localStorage.removeItem(c));
-    window.location.href = PAGINA_LOGIN;
-}
-
-function salvarPerfilUsuario(nome, email, time) {
-    const atual = localStorage.getItem(CHAVE_SESSAO);
-    const usuarios = lerJSON(CHAVE_USUARIOS, {});
-    if (!atual || !usuarios[atual]) return;
-    usuarios[atual].nome = nome;
-    usuarios[atual].time = time;
-    gravarJSON(CHAVE_USUARIOS, usuarios);
-}
-
-// ---------- Cadastro ----------
-async function tratarCadastro(e) {
-    e.preventDefault();
-    const nome = document.getElementById('nome').value.trim();
-    const email = normalizarEmail(document.getElementById('email').value);
-    const senha = document.getElementById('senha').value;
-    const confirmar = document.getElementById('confirmar-senha');
-
-    if (!nome || !email) return mostrarMsg('cadastro-erro', 'Preencha nome e e-mail.');
-    if (senha.length < 6) return mostrarMsg('cadastro-erro', 'A senha precisa ter pelo menos 6 caracteres.');
-    if (confirmar && confirmar.value !== senha) return mostrarMsg('cadastro-erro', 'As senhas não são iguais.');
-
-    const usuarios = lerJSON(CHAVE_USUARIOS, {});
-    if (usuarios[email]) return mostrarMsg('cadastro-erro', 'Este e-mail já está cadastrado. Faça login.');
-
-    usuarios[email] = { nome, senha: await hashSenha(senha), time: '' };
-    gravarJSON(CHAVE_USUARIOS, usuarios);
-    iniciarSessao(email);
-    window.location.href = PAGINA_APOS_LOGIN;
-}
-
-// ---------- Login ----------
-async function tratarLogin(e) {
-    e.preventDefault();
-    const email = normalizarEmail(document.getElementById('login-email').value);
-    const senha = document.getElementById('login-senha').value;
-
-    const usuario = lerJSON(CHAVE_USUARIOS, {})[email];
-    const ok = usuario && await conferirSenha(senha, usuario.senha);
-    if (!ok) return mostrarMsg('login-erro', 'E-mail ou senha incorretos.'); // mesma msg para os dois casos
-
-    iniciarSessao(email);
-    window.location.href = PAGINA_APOS_LOGIN;
-}
-
-// ---------- Esqueci a senha: etapa 1 (pedir código) ----------
-function tratarPedidoCodigo(e) {
-    e.preventDefault();
-    const email = normalizarEmail(document.getElementById('esqueci-email').value);
-    const usuarios = lerJSON(CHAVE_USUARIOS, {});
-
-    if (usuarios[email]) {
-        const codigo = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
-        const codigos = lerJSON(CHAVE_CODIGOS, {});
-        codigos[email] = { codigo, expira: Date.now() + MINUTOS_VALIDADE_CODIGO * 60000, tentativas: 0 };
-        gravarJSON(CHAVE_CODIGOS, codigos);
-        // SIMULAÇÃO do e-mail: sem servidor não dá para enviar de verdade
-        alert(`(Simulação de e-mail) Seu código de confirmação é: ${codigo}\nVálido por ${MINUTOS_VALIDADE_CODIGO} minutos.`);
-    }
-    sessionStorage.setItem(CHAVE_RESET, email);
-    mostrarMsg('esqueci-msg', 'Se o e-mail estiver cadastrado, um código foi enviado.', true);
-
-    const etapaEmail = document.getElementById('etapa-email');
-    const etapaCodigo = document.getElementById('etapa-codigo');
-    if (etapaEmail) etapaEmail.hidden = true;
-    if (etapaCodigo) etapaCodigo.hidden = false;
-}
-
-// ---------- Esqueci a senha: etapa 2 (código + nova senha) ----------
-async function tratarRedefinicao(e) {
-    e.preventDefault();
-    const email = sessionStorage.getItem(CHAVE_RESET);
-    const codigoDigitado = document.getElementById('codigo').value.trim();
-    const nova = document.getElementById('nova-senha').value;
-    const confirmar = document.getElementById('confirmar-nova-senha');
-
-    if (!email) return mostrarMsg('redefinir-msg', 'Comece informando o seu e-mail.');
-    if (nova.length < 6) return mostrarMsg('redefinir-msg', 'A nova senha precisa ter pelo menos 6 caracteres.');
-    if (confirmar && confirmar.value !== nova) return mostrarMsg('redefinir-msg', 'As senhas não são iguais.');
-
-    const codigos = lerJSON(CHAVE_CODIGOS, {});
-    const registro = codigos[email];
-    if (!registro) return mostrarMsg('redefinir-msg', 'Código inválido. Peça um novo.');
-    if (Date.now() > registro.expira) {
-        delete codigos[email]; gravarJSON(CHAVE_CODIGOS, codigos);
-        return mostrarMsg('redefinir-msg', 'Código expirado. Peça um novo.');
-    }
-    if (codigoDigitado !== registro.codigo) {
-        registro.tentativas++;
-        if (registro.tentativas >= MAX_TENTATIVAS_CODIGO) delete codigos[email];
-        gravarJSON(CHAVE_CODIGOS, codigos);
-        return mostrarMsg('redefinir-msg', 'Código incorreto.');
+            alert("Cadastro realizado com sucesso! Bem-vindo ao clube.");
+            window.location.href = "principal.html";
+        });
     }
 
-    const usuarios = lerJSON(CHAVE_USUARIOS, {});
-    usuarios[email].senha = await hashSenha(nova);
-    gravarJSON(CHAVE_USUARIOS, usuarios);
-    delete codigos[email]; gravarJSON(CHAVE_CODIGOS, codigos);
-    sessionStorage.removeItem(CHAVE_RESET);
+    if (formLogin) {
+        formLogin.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = document.getElementById("login-email").value.trim();
+            const senha = document.getElementById("login-senha").value;
+            const erroEl = document.getElementById("login-erro");
 
-    mostrarMsg('redefinir-msg', 'Senha alterada! Redirecionando para o login...', true);
-    setTimeout(() => { window.location.href = PAGINA_LOGIN; }, 1500);
-}
+            const emailSalvo = localStorage.getItem("usuario_email");
+            const senhaSalva = localStorage.getItem("usuario_senha");
 
-// ---------- Liga tudo nos formulários que existirem na página ----------
-document.addEventListener('DOMContentLoaded', () => {
-    const ligar = (id, fn) => { const f = document.getElementById(id); if (f) f.addEventListener('submit', fn); };
-    ligar('form-cadastro', tratarCadastro);
-    ligar('form-login', tratarLogin);
-    ligar('form-esqueci', tratarPedidoCodigo);
-    ligar('form-redefinir', tratarRedefinicao);
+            if (email === emailSalvo && senha === senhaSalva) {
+                localStorage.setItem("futhis_sessao", "ativo");
+                alert("Login realizado com sucesso!");
+                window.location.href = "principal.html";
+            } else {
+                if (erroEl) { erroEl.textContent = "E-mail ou senha incorretos."; erroEl.hidden = false; }
+                alert("Erro: E-mail ou senha incorretos! Tente novamente.");
+            }
+        });
+    }
 
-    const btnSair = document.getElementById('btn-sair');
-    if (btnSair) btnSair.addEventListener('click', sair);
+    if (formEsqueci) {
+        formEsqueci.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = document.getElementById("esqueci-email").value.trim();
+            const msgEl = document.getElementById("esqueci-msg");
+            const emailSalvo = localStorage.getItem("usuario_email");
+
+            if (email !== emailSalvo) {
+                alert("Erro: Este e-mail não está cadastrado no sistema!");
+                return;
+            }
+
+            localStorage.setItem("codigo_recuperacao", "123456");
+
+            if (msgEl) { msgEl.textContent = "Código enviado para o seu e-mail!"; msgEl.hidden = false; }
+            alert("Código de recuperação simulado enviado! Use o código: 123456");
+
+            document.getElementById("etapa-email").hidden = true;
+            document.getElementById("etapa-codigo").hidden = false;
+        });
+    }
+
+    if (formRedefinir) {
+        formRedefinir.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const codigo = document.getElementById("codigo").value.trim();
+            const novaSenha = document.getElementById("nova-senha").value;
+            const confirmarNova = document.getElementById("confirmar-nova-senha").value;
+            const msgEl = document.getElementById("redefinir-msg");
+
+            const codigoSalvo = localStorage.getItem("codigo_recuperacao");
+
+            if (codigo !== codigoSalvo) {
+                if (msgEl) { msgEl.textContent = "Código inválido."; msgEl.hidden = false; }
+                alert("Erro: Código de verificação incorreto!");
+                return;
+            }
+
+            if (novaSenha.length < 6) {
+                alert("Erro: A nova senha precisa ter no mínimo 6 caracteres!");
+                return;
+            }
+
+            if (novaSenha !== confirmarNova) {
+                if (msgEl) { msgEl.textContent = "As senhas não coincidem."; msgEl.hidden = false; }
+                alert("Erro: As senhas não coincidem! Redigite a confirmação.");
+                document.getElementById("confirmar-nova-senha").value = "";
+                return;
+            }
+
+            localStorage.setItem("usuario_senha", novaSenha);
+            localStorage.removeItem("codigo_recuperacao");
+
+            alert("Senha alterada com sucesso! Faça login com suas novas credenciais.");
+            window.location.href = "login.html";
+        });
+    }
 });
-
-window.FutHisAuth = { sair, salvarPerfilUsuario };
-    window.location.href = "index.html";
-}
