@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formRedefinir = document.getElementById("form-redefinir");
 
     function obterPaginaPrincipal() {
-        const paginasPossiveis = ["principal.html", "index.html"];
-        return paginasPossiveis[0]; 
+        return "principal.html"; 
     }
 
     if (formCadastro) {
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem("codigo_recuperacao", "123456");
             if (msgEl) { msgEl.textContent = "Código enviado!"; msgEl.hidden = false; }
-            alert("Código de recuperação: 123456");
+            alert("Código de recuperação simulado: 123456");
 
             document.getElementById("etapa-email").hidden = true;
             document.getElementById("etapa-codigo").hidden = false;
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (novaSenha.length < 6) {
-                alert("Erro: A senha deve ter no mínimo 6 caracteres!");
+                alert("Erro: A nova senha deve ter no mínimo 6 caracteres!");
                 return;
             }
 
