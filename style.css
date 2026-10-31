@@ -1,14 +1,13 @@
 :root {
-  --bg-principal: #0F0F12;      
-  --bg-card: #16161D;           
-  --cor-destaque: #D4AF37;      
-  --texto-claro: #FFFFFF;       
-  --texto-mutado: #A0A0AB;      
-  --borda: #27272A;             
+  --bg-principal: #0F0F12;
+  --bg-card: #16161D;
+  --cor-destaque: #D4AF37;
+  --texto-claro: #FFFFFF;
+  --texto-mutado: #A0A0AB;
+  --borda: #27272A;
 }
 
 * {
-  
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -23,6 +22,12 @@ body {
   width: 100%;
   height: 100vh;
   overflow: hidden;
+}
+
+body:has(.conteudo-principal) {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .carrossel-fundo {
@@ -45,17 +50,17 @@ body {
 }
 
 .slide:nth-child(1) {
-  background-image: url('https://s2-ge.glbimg.com/PaT6vENsUcRtzWY_klyr-0CY4pA=/0x0:6000x4000/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2026/y/A/nwKCSjTfAJM11qJdUnDw/espanha-reu2.jpg');
+  background-image: url('https://glbimg.com');
   animation-delay: 4s;
 }
 
 .slide:nth-child(2) {
-  background-image: url('https://lncimg.lance.com.br/cdn-cgi/image/width=950,quality=60,fit=pad,format=webp/uploads/2026/06/AFP__20260620__2282424906__v1__HighRes__BrazilVHaitiGroupCFifaWorldCup2026-scaled.jpg');
+  background-image: url('https://lance.com.br');
   animation-delay: 8s;
 }
 
 .slide:nth-child(3) {
-  background-image: url('https://img.magnific.com/fotos-gratis/conceito-de-jogo-de-futebol_23-2151043857.jpg');
+  background-image: url('https://magnific.com');
   animation-delay: 12s;
 }
 
@@ -126,50 +131,47 @@ h1 span {
   100% { opacity: 0; }
 }
 
-
 .form-container {
- background-color: var(--bg-card);
+  background-color: var(--bg-card);
   width: 100%;
   max-width: 400px;
   padding: 0px 25px;
   border-radius: 15px;
   border: 1px solid var(--borda);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  
-}
-.layout{
- display: flex;
-  width: 100%;
-  height: 100vh; 
-  overflow: hidden; 
-  justify-content: center;
-  align-items: center;
-  margin:  0;
-  flex-direction: column;
 }
 
+.layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  flex-direction: column;
+}
 
 .layoutsplit {
   display: flex;
   width: 100%;
-  height: 100vh; 
-  overflow: hidden; 
+  height: 100vh;
+  overflow: hidden;
 }
 
-.telaesq{
-  flex: 5; 
+.telaesq {
+  flex: 5;
   background-color: #D4AF37;
   display: flex;
   justify-content: center;
   align-items: center;
-    
 }
 
 .ladodir {
-  flex: 6; 
+  flex: 6;
   display: flex;
-  justify-content: center; 
-  align-items: center;     
+  justify-content: center;
+  align-items: center;
   background-color: var(--bg-principal);
   padding: 20px;
 }
@@ -262,7 +264,6 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .logo-retornar img {
@@ -362,7 +363,7 @@ input:focus {
   overflow: hidden;
   position: relative;
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-  white-space: normal; 
+  white-space: normal;
 }
 
 .card-fut-container.escondido {
@@ -484,7 +485,8 @@ input:focus {
   height: auto !important;
   max-height: 250px;
 }
-.container-esqueci{
+
+.container-esqueci {
   display: flex;
   justify-content: center;
   color: var(--texto-mutado);
@@ -492,12 +494,125 @@ input:focus {
   margin-bottom: 10px;
 }
 
-
-.divisor{
+.divisor {
   display: flex;
   justify-content: center;
   color: var(--texto-mutado);
   font-size: 0.9rem;
   margin-bottom: 10px;
- 
+}
+
+.card-fut-container { cursor: pointer; }
+.card-fut-container:focus-visible {
+  transform: translateY(-8px);
+  border-color: var(--cor-destaque);
+  outline: none;
+}
+
+.fut-camisa {
+  font-size: 0.9rem;
+  color: var(--cor-destaque);
+  font-weight: 700;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.fut-status {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.status-lenda { color: #EF4444; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
+.status-ativo { color: #22C55E; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.2); }
+
+.card-anos {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--bg-principal);
+  background: var(--cor-destaque);
+  border-radius: 6px;
+}
+.wiki-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 15, 18, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.wiki-overlay[hidden] { display: none; }
+.wiki-modal {
+  position: relative;
+  background: var(--bg-card);
+  color: var(--texto-claro);
+  border: 1px solid var(--borda);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  width: min(720px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 24px;
+}
+.wiki-modal::-webkit-scrollbar { width: 6px; }
+.wiki-modal::-webkit-scrollbar-thumb { background: var(--cor-destaque); border-radius: 10px; }
+.wiki-fechar {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  background: none;
+  border: 0;
+  color: var(--texto-claro);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.wiki-fechar:hover { color: var(--cor-destaque); }
+.wiki-cabecalho { display: flex; gap: 16px; margin-bottom: 16px; }
+.wiki-cabecalho img { width: 110px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid var(--borda); }
+.wiki-cabecalho h2 { margin: 0 0 10px; text-align: left; font-size: 1.6rem; }
+.wiki-datas { display: flex; flex-wrap: wrap; gap: 8px; }
+.wiki-chip {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--cor-destaque);
+  border-radius: 8px;
+  padding: 6px 10px;
+  min-width: 110px;
+}
+.wiki-chip small {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--texto-mutado);
+}
+.wiki-chip strong { display: block; font-size: 1.3rem; color: var(--cor-destaque); line-height: 1.2; }
+.wiki-chip span { font-size: 0.8rem; color: var(--texto-mutado); }
+.wiki-texto p { line-height: 1.7; margin: 0 0 12px; color: #E4E4E7; }
+.wiki-texto h3 {
+  color: var(--cor-destaque);
+  margin: 22px 0 8px;
+  font-size: 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  padding-bottom: 4px;
+}
+.wiki-texto h4 { color: var(--texto-claro); margin: 14px 0 6px; font-size: 1rem; }
+.wiki-fonte { font-size: 0.8rem; color: var(--texto-mutado); margin-top: 16px; }
+.wiki-fonte a { color: var(--cor-destaque); }
+.titulo-goleiros {
+  color: var(--texto-claro);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--cor-destaque);
+  padding-left: 12px;
 }
