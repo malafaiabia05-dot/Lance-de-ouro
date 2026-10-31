@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formRedefinir = document.getElementById("form-redefinir");
 
     function obterPaginaPrincipal() {
-        const paginasPossiveis = ["ipal.html", "principal.html", "index.html"];
+        const paginasPossiveis = ["principal.html", "index.html"];
         return paginasPossiveis[0]; 
     }
 
