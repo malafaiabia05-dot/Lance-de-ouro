@@ -13,23 +13,16 @@ function salvarItem(idConteudo) {
     }
 }
 
+// Chame no topo de páginas que exigem login: exigirLogin();
+function exigirLogin() {
+    if (!localStorage.getItem('futhis_sessao')) window.location.href = 'login.html';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    const formCadastro = document.querySelector("form");
     const inputPerfilNome = document.getElementById("perfil-nome");
     const inputPerfilEmail = document.getElementById("perfil-email");
     const inputPerfilTime = document.getElementById("perfil-time");
     const btnAtualizarPerfil = document.getElementById("btn-atualizar-perfil");
-
-    if (formCadastro && window.location.pathname.includes("conta.html")) {
-        formCadastro.addEventListener("submit", (e) => {
-            const nomeDigitado = document.getElementById("nome").value;
-            const emailDigitado = document.getElementById("email").value;
-
-            localStorage.setItem("usuario_nome", nomeDigitado);
-            localStorage.setItem("usuario_email", emailDigitado);
-            localStorage.setItem("usuario_time", ""); 
-        });
-    }
 
     if (inputPerfilNome && inputPerfilEmail) {
         const nomeSalvo = localStorage.getItem("usuario_nome") || "Nome do Torcedor";
@@ -38,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         inputPerfilNome.value = nomeSalvo;
         inputPerfilEmail.value = emailSalvo;
-        inputPerfilTime.value = timeSalvo;
+        if (inputPerfilTime) inputPerfilTime.value = timeSalvo;
     }
 
     if (btnAtualizarPerfil) {
@@ -50,11 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem("usuario_nome", inputPerfilNome.value);
             localStorage.setItem("usuario_email", inputPerfilEmail.value);
-            localStorage.setItem("usuario_time", inputPerfilTime.value);
-            
+            localStorage.setItem("usuario_time", inputPerfilTime ? inputPerfilTime.value : "");
+
+            if (window.FutHisAuth) {
+                FutHisAuth.salvarPerfilUsuario(inputPerfilNome.value, inputPerfilEmail.value, inputPerfilTime ? inputPerfilTime.value : "");
+            }
             alert("Perfil de torcedor atualizado com sucesso!");
         });
     }
+
+    // Os gráficos só rodam se a biblioteca Chart.js estiver carregada na página
+    if (typeof Chart === 'undefined') return;
 
     const ctxGols = document.getElementById('graficoGols');
     if (ctxGols) {
@@ -64,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 labels: ['Botafogo', 'Palmeiras', 'Flamengo', 'Fortaleza', 'São Paulo', 'Cruzeiro'],
                 datasets: [{
                     label: 'Gols Marcados',
-                    data:,
+                    data: [32, 35, 40, 28, 25, 22], // TROQUE pelos valores reais
                     backgroundColor: '#D4AF37',
                     borderColor: '#FFFFFF',
                     borderWidth: 1
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 labels: ['Rod 26', 'Rod 27', 'Rod 28', 'Rod 29', 'Rod 30'],
                 datasets: [{
                     label: 'Evolução Líder',
-                    data:,
+                    data: [48, 51, 54, 57, 60], // TROQUE pelos valores reais
                     borderColor: '#D4AF37',
                     backgroundColor: 'rgba(212, 175, 55, 0.1)',
                     tension: 0.2,
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             data: {
                 labels: ['Difíceis', 'Pênaltis', 'Normais'],
                 datasets: [{
-                    data:,
+                    data: [35, 10, 55], // TROQUE pelos valores reais
                     backgroundColor: ['#D4AF37', '#27272A', '#A0A0AB'],
                     borderColor: '#16161D',
                     borderWidth: 1
